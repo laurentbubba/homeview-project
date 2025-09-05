@@ -48,4 +48,4 @@ jobs:
         app-name: 'homeview-project'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_eec3227b99b14afdb72ee4eeb57c4d36 }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b2ea5b29840748b5a6ae38c450747be0 }}/tdsminformatics/homeview-project:${{ github.sha }}'
+        images: 'index.docker.io/tdsminformatics/homeview-project:${{ github.sha }}'
