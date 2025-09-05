@@ -47,6 +47,7 @@
     "lib": ["es2016", "dom"],
     "target": "es6",
     "rootDir": "./",
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true
   }

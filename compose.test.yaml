@@ -1,0 +1,13 @@
+services:
+  back-end-test:
+    build:
+      context: .
+      target: development
+    container_name: homeview-project-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - NODE_ENV=development
+

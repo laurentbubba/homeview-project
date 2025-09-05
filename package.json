@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "test": "jest",
-    "start": "nodemon -L app.ts --delay 3"
+    "start": "nodemon -L app.ts --delay 3",
+    "build": "tsc"
   },
   "nodemonConfig": {
     "ext": "ts",

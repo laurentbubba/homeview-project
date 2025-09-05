@@ -1,38 +1,53 @@
 # syntax=docker/dockerfile:1
-
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
-ARG NODE_VERSION=22.19.0
-
-FROM node:${NODE_VERSION}-alpine
-
-# Use production node environment by default.
-ENV NODE_ENV production
-
-
+# ----------------------------------------------------
+# STAGE 1: Common Base and Dependency Installation
+# This stage installs all dependencies (dev and prod) to leverage caching.
+# ----------------------------------------------------
+FROM node:22.19.0-alpine AS base
 WORKDIR /usr/src/app
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
+# Bind mounts are only for dev builds, so this works for prod too.
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+    npm ci
 
-# Run the application as a non-root user.
-USER node
-
-# Copy the rest of the source files into the image.
+# Copy the source code for building
 COPY . .
 
-# Expose the port that the application listens on.
+# ----------------------------------------------------
+# STAGE 2: Development Environment
+# This stage is for running the app in dev mode with hot-reloading.
+# ----------------------------------------------------
+FROM base AS development
+ENV NODE_ENV=development
+# No special build command needed, just run the start
 EXPOSE 3000
+CMD ["npm", "start"]
 
-# Run the application.
-CMD npm start
+# ----------------------------------------------------
+# STAGE 3: Build for Production
+# This stage compiles the TypeScript code into JavaScript.
+# ----------------------------------------------------
+FROM base AS build
+ENV NODE_ENV=production
+# Run the build script
+RUN npm run build
+
+# ----------------------------------------------------
+# STAGE 4: Final Production Image
+# This stage is as lean as possible, with only prod dependencies and built files.
+# ----------------------------------------------------
+FROM node:22.19.0-alpine AS production
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+
+# Copy only production dependencies from the build stage
+COPY --from=build /usr/src/app/package.json /usr/src/app/package-lock.json ./
+RUN npm ci --omit=dev
+
+# Copy the built files from the build stage
+COPY --from=build /usr/src/app/dist ./dist
+
+EXPOSE 3000
+CMD ["node", "dist/app.js"]
