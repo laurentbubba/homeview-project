@@ -6,5 +6,6 @@ services:
     container_name: homeview-project-prod
     ports:
       - "3000:3000"
+      - "4000:4000"
     environment:
       - NODE_ENV=production

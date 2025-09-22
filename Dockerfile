@@ -22,7 +22,7 @@ COPY . .
 FROM base AS development
 ENV NODE_ENV=development
 # No special build command needed, just run the start
-EXPOSE 3000
+EXPOSE 3000 4000
 CMD ["npm", "start"]
 
 # ----------------------------------------------------
@@ -49,5 +49,5 @@ RUN npm ci --omit=dev
 # Copy the built files from the build stage
 COPY --from=build /usr/src/app/dist ./dist
 
-EXPOSE 3000
+EXPOSE 3000 4000
 CMD ["node", "dist/app.js"]
