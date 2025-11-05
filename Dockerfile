@@ -46,6 +46,9 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/package.json /usr/src/app/package-lock.json ./
 RUN npm ci --omit=dev
 
+# I donno man
+RUN npx prisma generate
+
 # Copy the built files from the build stage
 COPY --from=build /usr/src/app/dist ./dist
 
