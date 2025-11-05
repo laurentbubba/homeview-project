@@ -49,5 +49,5 @@ RUN npm ci --omit=dev
 # Copy the built files from the build stage
 COPY --from=build /usr/src/app/dist ./dist
 
-EXPOSE 3000 4000
+EXPOSE 4000
 CMD ["node", "dist/app.js"]
