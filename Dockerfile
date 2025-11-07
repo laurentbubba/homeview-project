@@ -22,7 +22,7 @@ COPY . .
 FROM base AS development
 ENV NODE_ENV=development
 # No special build command needed, just run the start
-EXPOSE 3000 4000
+EXPOSE 4000
 CMD ["npm", "start"]
 
 # ----------------------------------------------------
