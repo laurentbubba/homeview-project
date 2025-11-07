@@ -50,7 +50,7 @@ jobs:
 
             - name: Run Prisma Migrations
               run: |
-                  docker run --rm \ 
+                  docker run --rm \
                   -e DATABASE_URL=${{ secrets.PRISMA_DATABASE_URL }} \
                   index.docker.io/tdsminformatics/homeview-project:${{ github.sha }} \
                   npx prisma migrate deploy
