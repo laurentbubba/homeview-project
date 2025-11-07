@@ -53,7 +53,7 @@ jobs:
               run: |
                   docker run --rm \
                   -e DATABASE_URL=${{ secrets.PRISMA_DATABASE_URL }} \
-                  index.docker.io/tdsminformatics/homeview-project:${{ github.sha }} \
+                  tdsminformatics/homeview-project:${{ github.sha }} \
                   -- npx prisma migrate deploy
 
             - name: Deploy to Azure Web App
