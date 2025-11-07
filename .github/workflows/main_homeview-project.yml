@@ -51,7 +51,8 @@ jobs:
             # Go in the docker container to migrate prisma to our db
             - name: Run Prisma Migrations
               run: |
-                  docker run --rm -e DATABASE_URL=${{ secrets.PRISMA_DATABASE_URL }} index.docker.io/tdsminformatics/homeview-project:${{ github.sha }} npx prisma migrate deploy
+                  docker run --rm -e DATABASE_URL=${{ secrets.PRISMA_DATABASE_URL }} index.docker.io/tdsminformatics/homeview-project:${{ github.sha }} \
+                  npx prisma migrate deploy
 
             - name: Deploy to Azure Web App
               id: deploy-to-webapp
