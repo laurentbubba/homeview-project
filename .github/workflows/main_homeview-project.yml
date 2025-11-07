@@ -48,13 +48,15 @@ jobs:
                   username: ${{ secrets.AzureAppService_ContainerUsername_b2ea5b29840748b5a6ae38c450747be0 }}
                   password: ${{ secrets.AzureAppService_ContainerPassword_969669e416584db3bc92e6a91ad0a06e }}
 
+            - run: echo "Command about to run:" && echo "docker run --rm -e DATABASE_URL='${{ secrets.PRISMA_DATABASE_URL }}' tdsminformatics/homeview-project:${{ github.sha }} npx prisma migrate deploy"
+
             # Go in the docker container to migrate prisma to our db
             - name: Run Prisma Migrations
               run: |
                   docker run --rm \
                   -e DATABASE_URL=${{ secrets.PRISMA_DATABASE_URL }} \
-                  tdsminformatics/homeview-project:${{ github.sha }} \
-                  -- npx prisma migrate deploy
+                  index.docker.io/tdsminformatics/homeview-project:${{ github.sha }} \
+                  npx prisma migrate deploy
 
             - name: Deploy to Azure Web App
               id: deploy-to-webapp
